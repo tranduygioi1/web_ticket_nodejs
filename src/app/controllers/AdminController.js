@@ -32,50 +32,6 @@ class AdminController {
         res.render('admin/login', { layout: false });
     }
 
-    // POST /admin/login
-    // async xulylogin(req, res) {
-    //     const { email, password } = req.body;
-
-    //     // Kiểm tra 3 tài khoản gốc (defaultAdmins)
-    //     const superAdmin = defaultAdmins.find(
-    //         acc => acc.email === email && acc.password === password
-    //     );
-    //     if (superAdmin) {
-    //         req.session.admin = superAdmin;
-    //         return res.redirect('/admin/list_event');
-    //     }
-
-    //     try {
-    //         const admin = await Admin.findOne({ username });
-
-    //         if (!admin) {
-    //             return res.status(400).send('Email không tồn tại');
-    //         }
-
-    //         if (admin.password.trim() !== password.trim()) {
-    //             return res.status(400).send('Sai mật khẩu');
-    //         }
-
-    //         // Lưu thông tin admin vào session
-    //         req.session.admin = {
-    //             _id: admin._id,
-    //             email: admin.email,
-    //             role: admin.role
-    //         };
-
-    //         // Điều hướng theo role
-    //         if (admin.role === 'ticket_admin') {
-    //             return res.redirect('/admin/booking_management');
-    //         } else {
-    //             return res.redirect('/admin/list_event');
-    //         }
-
-    //     } catch (error) {
-    //         console.error(error);
-    //         res.status(500).send('Lỗi server');
-    //     }
-    // }
-
     xulylogin(req, res) {
     const { username, password } = req.body;
 
