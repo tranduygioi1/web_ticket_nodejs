@@ -1,0 +1,21 @@
+<div id="registerModal" class="modal-overlay d-none">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Đăng ký</h4>
+      <button class="close-btn" onclick="closeRegisterModal()">×</button>
+    </div>
+
+    <form id="registerForm">
+      <input type="text" name="email_login" placeholder="Nhập email" required />
+      <input type="password" name="password" placeholder="Nhập mật khẩu" required />
+      <input type="password" name="confirmPassword" placeholder="Nhập lại mật khẩu" required />
+      <button type="submit">Đăng ký</button>
+      <p id="registerError" style="color:red; display:none; margin-top:5px;"></p>
+      <p id="registerSuccess" style="color:green; display:none; margin-top:5px;"></p>
+    </form>
+
+    <p class="policy-text">
+      Khi đăng ký, bạn đã đồng ý với <a href="#">Điều khoản</a> và <a href="#">Chính sách</a>
+    </p>
+  </div>
+</div>

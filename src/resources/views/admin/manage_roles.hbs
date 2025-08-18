@@ -1,0 +1,63 @@
+<h1 class="mt-3">Quản lý Quyền</h1>
+
+<form action="/admin/add_role" method="POST" class="mt-3">
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th style="width: 50px;">#</th>
+        <th style="width: 250px;">Tên quyền</th>
+        <th>Mô tả</th>
+        <!-- 🔥 Đưa "Hành động" lên trước -->
+        <th style="width: 200px;">Hành động</th>
+        <!-- 🔥 "Thời gian tạo" ra ngoài cùng -->
+        <th style="width: 200px;">Thời gian tạo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Hàng nhập thêm mới -->
+      <tr>
+        <td>+</td>
+        <td>
+          <select name="role_name" class="form-control" required>
+            <option value="">-- Chọn quyền --</option>
+            <option value="Create event">Create event</option>
+            <option value="Manage event">Manage event</option>
+            <option value="Manage ticket">Manage ticket</option>
+            <option value="Manage roles">Manage roles</option>
+          </select>
+        </td>
+        <td>
+          <input type="text" name="description" class="form-control" placeholder="Mô tả" required>
+        </td>
+        <!-- 🔥 Nút Thêm ở cột Hành động -->
+        <td class="text-center">
+          <button type="submit" class="btn btn-success btn-sm w-50">Thêm</button>
+        </td>
+      </tr>
+    </form>
+
+      <!-- Danh sách quyền hiện có -->
+      {{#each roles}}
+      <tr>
+        <th scope="row">{{sum @index 1}}</th>
+        <td>{{this.role_name}}</td>
+        <td>{{this.description}}</td>
+        <!-- 🔥 Hành động trước -->
+        <td class="text-center">
+          <div class="d-flex justify-content-center gap-2">
+            <form action="/admin/edit_role/{{this._id}}" method="GET">
+              <button type="submit" class="btn btn-warning btn-sm w-100">Sửa</button>
+            </form>
+            <form action="/admin/delete_role/{{this._id}}" method="POST" 
+                onsubmit="return confirm('Bạn có chắc chắn muốn xóa quyền này không?')">
+            <button type="submit" class="btn btn-danger btn-sm w-100">Xóa</button>
+            </form>
+
+          </div>
+        </td>
+        <!-- 🔥 Thời gian tạo ra ngoài cùng -->
+        <td>{{ formatDate this.createdAt}}</td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>

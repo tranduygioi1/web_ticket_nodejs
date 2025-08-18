@@ -1,0 +1,11 @@
+<div class="container my-4">
+    <h3 class="danh-muc">Tất cả Sự Kiện</h3>
+        <div class="row">
+        {{#each allEvent}}
+            <div class="col-sm-6 col-lg-3 mb-4">
+                {{> eventCard this }}
+            </div>
+        {{/each}}
+        </div>
+    </div>
+</div>

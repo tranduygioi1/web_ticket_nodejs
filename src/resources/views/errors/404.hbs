@@ -1,0 +1,34 @@
+<style>
+
+    .error-container {
+        background-color: rgb(43, 39, 39);
+        text-align: center;
+        margin-top: 100px;
+        margin-bottom: 100px;
+    }
+    .error-code {
+        font-size: 6rem;
+        font-weight: bold;
+        color: #28a745;
+    }
+    .error-message {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    .btn-back {
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+    }
+</style>
+
+  <div class="error-container">
+    <div class="error-code">404</div>
+    <div class="error-message text-white">{{message}}</div>
+    <a href="/" class="btn-back mb-4">Quay lại trang chủ</a>
+  </div>
+

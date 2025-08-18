@@ -1,0 +1,109 @@
+<!-- Banner 2 sự kiện nổi bật -->
+<div class="py-4" >
+  <div class="container">
+    <div class="row custom-gap">
+      {{#each bannerEvents}}
+        <div class="col-md-6">
+          <div class="position-relative">
+            <a href="/events/{{this.slug}}">
+              <img src="{{this.image}}" class="img-fluid banner-image w-100" alt="{{this.name}}">
+            </a>
+            <!-- Nút "Xem chi tiết" nằm trong banner -->
+            <a href="/events/{{this.slug}}" class="btn btn-light btn-sm position-absolute" style="bottom: 16px; left: 16px;">
+              Xem chi tiết
+            </a>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
+
+<!-- Danh mục: Sự kiện đặc biệt -->
+<div class="container multi-carousel-wrapper">
+  <h3 class="danh-muc">Sự kiện nổi bật 1</h3>
+  <button class="carousel-btn left"><i class="fas fa-chevron-left"></i></button>
+
+  <div class="multi-carousel">
+    {{#each specialEvents}}
+      <div class="carousel-item-card">
+        <a href="events/{{this.slug}}">
+          <img src="{{this.image}}" alt="{{this.name}}">
+        </a>
+      </div>
+    {{/each}}
+  </div>
+
+  <button class="carousel-btn right"><i class="fas fa-chevron-right"></i></button>
+</div>
+
+<div class="container my-4">
+  <h3 class="danh-muc">Sự kiện đặc biệt</h3>
+  <div class="row">
+    {{#each specialEvents}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<!-- Danh mục: Sự kiện xu hướng -->
+<div class="container">
+  <h3 class="danh-muc">Sự kiện xu hướng</h3>
+  <div class="row">
+    {{#each trendingEvents}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<!-- Danh mục: Dành cho bạn -->
+<div class="container">
+  <h3 class="danh-muc">Dành cho bạn</h3>
+  <div class="row">
+    {{#each forYouEvents}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<!-- Danh mục: Nhạc sống -->
+<div class="container">
+  <h3 class="danh-muc">Nhạc sống</h3>
+  <div class="row">
+    {{#each liveMusicEvents}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<!-- Danh mục: Sân khấu và nghệ thuật -->
+<div class="container">
+  <h3 class="danh-muc">Sân khấu và nghệ thuật</h3>
+  <div class="row">
+    {{#each stageArtEvents}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<!-- Danh mục: Thể loại khác-->
+<div class="container">
+  <h3 class="danh-muc">Thể Loại Khác</h3>
+  <div class="row">
+    {{#each allEvent}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>

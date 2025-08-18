@@ -1,0 +1,21 @@
+<div class="card h-100 card-event-item">
+  <a href="/events/{{slug}}">
+    <img class="card-img-top" src="{{image}}" alt="{{name}}">
+  </a>
+
+  <div class="card-body">
+    <a href="/events/{{slug}}">
+      <h5 class="card-title">{{name}}</h5>
+    </a>
+
+    <p class="ticket-price">
+      <i class="fas fa-ticket-alt"></i> Từ {{prices.[0].price}} VNĐ
+    </p>
+
+    <p class="card-text">
+      <i class="far fa-calendar-alt"></i> {{getDateOnly time}}
+    </p>
+
+    
+  </div>
+</div>

@@ -1,0 +1,118 @@
+<!-- PHẦN 1: XÁM -->
+<div class="show-section section-gray">
+  <div class="container">
+    <div class="ticketbox-card d-flex">
+      <!-- Thông tin -->
+      <div class="event-info text-white p-4">
+        <h5 class="event-title">{{event.name}}</h5>
+        <p class="event-time" style="font-weight: bold; color:#00d96f">
+          <i class="far fa-calendar-alt"></i> {{event.time}}
+        </p>
+        <p class="event-location">
+          <i class="fas fa-map-marker-alt"></i> {{event.location}}
+        </p>
+
+        <hr style="border-color: #444">
+
+        <div class="event-price">
+          <span>Giá từ:</span>
+          <a href="#">
+            <strong class="price-value">{{event.prices.[0].price}} VND</strong>
+          </a>
+          <i class="fas fa-chevron-right text-success ml-1"></i>
+        </div>
+        <a href="#" onclick="handleBuyTicket(event)" class="btn btn-buy mt-3">Mua vé ngay</a>
+      </div>
+      
+      <!-- Hình ảnh -->
+      <div class="event-banner">
+        <img src="{{event.image}}" class="img-fluid h-100 w-100" alt="Banner">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- PHẦN 2: TRẮNG -->
+<div class="show-section section-white">
+  <div class="container">
+    <div class="event-description-wrapper">
+      <h5 class="section-title">Giới thiệu</h5>
+      <div class="event-description-content collapsed" id="descriptionContent">
+        {{{event.description}}}
+      </div>
+      <a class="toggle-btn" id="toggleBtn">  Xem thêm  </a>
+    </div>
+
+    <div class="ticket-info-box">
+      <div class="ticket-info-header">
+        <h5>Thông tin vé</h5>
+        <div class="event-time">
+          <span><i class="far fa-clock"></i> {{event.time}}</span>
+          <a href="#" onclick="handleBuyTicket(event)" class="btn-buy">Mua vé ngay</a>
+        </div>
+      </div>
+      
+      <ul class="ticket-list">
+        {{#each event.prices}}
+          <li class="ticket-item">
+            <span class="ticket-type">{{this.type}}</span>
+            <span class="ticket-price">{{this.price}} VND</span>
+          </li>
+        {{/each}}
+      </ul>
+    </div>
+  </div>
+</div>
+
+
+<!-- PHẦN 3: XÁM -->
+<div class="show-section section-gray">
+  <div class="container">
+    <div class="">
+      <h3 class="danh-muc">Có thể bạn yêu thích</h3>
+      <div class="row">
+        {{#each allEvent}}
+          <div class="col-sm-6 col-lg-4 mb-4">
+            {{> eventCard this }}
+          </div>
+        {{/each}}
+      </div>
+    </div>
+
+    <!-- Danh mục: Thể loại khác-->
+      <h3 class="danh-muc">Thể Loại Khác</h3>
+      <div class="row">
+        {{#each allEvent}}
+          <div class="col-sm-6 col-lg-3 mb-4">
+            {{> eventCard this }}
+          </div>
+        {{/each}}
+      </div>
+  </div>
+
+    <!-- Nút "Xem thêm sự kiện" ra giữa -->
+  <div class="text-center mt-3">
+    <a href="/events/search" class="btn btn-buy">Xem thêm sự kiện</a>
+  </div>
+  
+</div>
+
+
+<!-- SCRIPT XỬ LÝ ĐĂNG NHẬP TRƯỚC KHI MUA -->
+<script>
+  function handleBuyTicket(e) {
+    e.preventDefault();
+
+    const isLoggedIn = {{#if user}}true{{else}}false{{/if}};
+    const pathParts = window.location.pathname.split('/');
+    const slug = pathParts[2]; // lấy slug từ URL /events/:slug
+
+    if (!isLoggedIn) {
+      sessionStorage.setItem('redirectAfterLogin', `/events/${slug}/select_ticket`);
+      showLoginModal();
+    } else {
+      window.location.href = `/events/${slug}/select_ticket`;
+    }
+  }
+</script>

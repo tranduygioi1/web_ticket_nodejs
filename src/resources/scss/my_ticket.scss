@@ -1,0 +1,89 @@
+h3.text-white {
+  color: #ffffff;
+  text-shadow: 1px 1px 2px #000;
+}
+
+/* Tabs */
+.ticket-tabs .btn {
+  min-width: 130px;
+  padding: 8px 20px;
+  font-weight: bold;
+  border-radius: 30px;
+  border: none;
+  background-color: #3a3a3a;
+  color: #ccc;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.ticket-tabs .btn:hover {
+  background-color: #5e5e5e;
+  color: #fff;
+}
+
+.ticket-tabs .btn-success {
+  background-color: #00c853 !important;
+  color: #fff !important;
+}
+
+/* Thẻ vé */
+.ticket-card {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0);
+  border-left: 6px solid #00c853;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease;
+}
+
+.ticket-card:hover {
+  transform: scale(1.02);
+}
+
+.ticket-card p,
+.ticket-card li {
+  color: #333;
+  margin-bottom: 6px;
+  font-size: 0.95rem;
+}
+
+/* Trạng thái */
+.text-success {
+  color: #2e7d32 !important;
+  font-weight: bold;
+}
+
+.text-warning {
+  color: #f9a825 !important;
+  font-weight: bold;
+}
+
+.text-danger {
+  color: #d32f2f !important;
+  font-weight: bold;
+}
+
+/* Nút hủy */
+.ticket-card .btn-danger {
+  margin-top: 10px;
+  background-color: #d32f2f;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.ticket-card .btn-danger:hover {
+  background-color: #b71c1c;
+}
+
+/* Tab nội dung */
+.ve-tab {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

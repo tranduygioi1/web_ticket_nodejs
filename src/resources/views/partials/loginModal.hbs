@@ -1,0 +1,287 @@
+<div id="loginModal" class="modal-overlay d-none">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4>Đăng nhập</h4>
+      <button class="close-btn" onclick="closeLoginModal()">×</button>
+    </div>
+    <form id="loginForm">
+      <input type="text" name="email_login" placeholder="Nhập email hoặc số điện thoại" required />
+      <input type="password" name="password" placeholder="Nhập mật khẩu" required />
+      <button type="submit">Tiếp tục</button>
+      <p id="loginError" style="color:red; display:none; margin-top:5px;"></p>
+    </form>
+
+    <div class="extra-links">
+        <a href="#" onclick="event.preventDefault(); openForgotPasswordModal()">Quên mật khẩu?</a>
+        <br>
+        <span>Chưa có tài khoản? 
+        <a href="#" onclick="event.preventDefault(); switchToRegister()">Tạo tài khoản ngay</a>
+        </span>
+    </div>
+
+    <div class="login-or">Hoặc</div>
+  
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Google OAuth nút -->
+    <div id="g_id_onload"
+        data-client_id="41696005756-nb9sb5ksksedhhco8i67jtvub5sj4g33.apps.googleusercontent.com"
+        data-callback="handleGoogleLogin"
+        data-auto_prompt="false">
+    </div>
+
+    <div class="g_id_signin"
+        data-type="standard"
+        data-shape="rectangular"
+        data-theme="outline"
+        data-text="signin_with"
+        data-size="large">
+    </div>
+
+  <script>
+    function handleGoogleLogin(response) {
+      console.log("Google ID Token:", response.credential); // Debug
+
+      fetch('/user/google-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ idToken: response.credential })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.user) {
+          location.reload(); // hoặc chuyển trang
+        } else {
+          alert(data.message || "Đăng nhập thất bại");
+        }
+      })
+      .catch(err => {
+        console.error("Lỗi Google login:", err);
+        alert("Đăng nhập thất bại!");
+      });
+    }
+  </script>
+
+   <!-- Script modal login/register -->
+    <script>
+      // Mở / đóng modal đăng nhập
+      function showLoginModal() {
+        document.getElementById('loginModal').classList.remove('d-none');
+      }
+      function closeLoginModal() {
+        document.getElementById('loginModal').classList.add('d-none');
+      }
+
+      // Mở / đóng modal đăng ký
+      function showRegisterModal() {
+        document.getElementById('registerModal').classList.remove('d-none');
+      }
+      function closeRegisterModal() {
+        document.getElementById('registerModal').classList.add('d-none');
+      }
+
+      // Chuyển từ login sang register
+      function switchToRegister() {
+        closeLoginModal();
+        showRegisterModal();
+      }
+
+      // Submit form đăng ký
+      document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('registerForm');
+        const errorEl = document.getElementById('registerError');
+        const successEl = document.getElementById('registerSuccess');
+
+        if (form) {
+          form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            errorEl.style.display = 'none';
+            successEl.style.display = 'none';
+
+            const formData = new FormData(form);
+            const data = {
+              email_login: formData.get('email_login'),
+              password: formData.get('password'),
+              confirmPassword: formData.get('confirmPassword')
+            };
+
+            if (data.password !== data.confirmPassword) {
+              errorEl.innerText = 'Mật khẩu nhập lại không khớp!';
+              errorEl.style.display = 'block';
+              return;
+            }
+
+            const res = await fetch('/user/register', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+              errorEl.innerText = result.message;
+              errorEl.style.display = 'block';
+            } else {
+              successEl.innerText = 'Đăng ký thành công! Bạn có thể đăng nhập.';
+              successEl.style.display = 'block';
+              setTimeout(() => {
+                closeRegisterModal();
+                showLoginModal();
+              }, 1500);
+            }
+          });
+        }
+      });
+    </script>
+
+    <!-- Script xử lý login -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+
+        if (loginForm) {
+          loginForm.addEventListener('submit', async function (e) {
+            e.preventDefault(); // chặn load lại trang
+
+            loginError.style.display = 'none';
+            const formData = new FormData(loginForm);
+            const data = {
+              email_login: formData.get('email_login'),
+              password: formData.get('password')
+            };
+
+            const res = await fetch('/user/login', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(data)
+            });
+
+            const result = await res.json();
+            if (!res.ok) {
+              loginError.innerText = result.message;
+              loginError.style.display = 'block';
+            } else {
+              // Đăng nhập thành công => reload để cập nhật trạng thái header
+              window.location.reload();
+            }
+          });
+        }
+      });
+    </script>
+
+    <script>
+      function openForgotPasswordModal() {
+        resetForgotPasswordModal();
+        document.getElementById('forgotPasswordModal').classList.remove('d-none');
+      }
+
+      function closeForgotPasswordModal() {
+        resetForgotPasswordModal();
+        document.getElementById('forgotPasswordModal').classList.add('d-none');
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        const forgotForm = document.getElementById('forgotPasswordForm');
+        const verifyForm = document.getElementById('verifyCodeForm');
+        const forgotError = document.getElementById('forgotError');
+        const forgotSuccess = document.getElementById('forgotSuccess');
+        const verifyError = document.getElementById('verifyError');
+        const verifySuccess = document.getElementById('verifySuccess');
+
+        // ✅ Gửi yêu cầu quên mật khẩu
+        forgotForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          forgotError.style.display = 'none';
+          forgotSuccess.style.display = 'none';
+
+          const formData = new FormData(forgotForm);
+          const data = {
+            email: formData.get('email'),
+            newPassword: formData.get('newPassword'),
+            confirmPassword: formData.get('confirmPassword')
+          };
+
+          const res = await fetch('/user/forgotpassword', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await res.json();
+
+          if (!res.ok) {
+            forgotError.innerText = result.message;
+            forgotError.style.display = 'block';
+          } else {
+            forgotSuccess.innerText = result.message;
+            forgotSuccess.style.display = 'block';
+            forgotForm.classList.add('d-none');
+            verifyForm.classList.remove('d-none');
+          }
+        });
+
+        // ✅ Gửi mã xác thực
+        verifyForm.addEventListener('submit', async function (e) {
+          e.preventDefault();
+          verifyError.style.display = 'none';
+          verifySuccess.style.display = 'none';
+
+          const formData = new FormData(verifyForm);
+          const data = { code: formData.get('code') };
+
+          const res = await fetch('/user/verify-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+          });
+
+          const result = await res.json();
+
+          if (!res.ok) {
+            verifyError.innerText = result.message;
+            verifyError.style.display = 'block';
+          } else {
+            verifySuccess.innerText = result.message;
+            verifySuccess.style.display = 'block';
+            setTimeout(() => {
+              closeForgotPasswordModal();
+            }, 1500);
+          }
+        });
+      });
+
+
+      function resetForgotPasswordModal() {
+        const forgotForm = document.getElementById('forgotPasswordForm');
+        const verifyForm = document.getElementById('verifyCodeForm');
+        const forgotError = document.getElementById('forgotError');
+        const forgotSuccess = document.getElementById('forgotSuccess');
+        const verifyError = document.getElementById('verifyError');
+        const verifySuccess = document.getElementById('verifySuccess');
+
+        // Reset form & ẩn thông báo
+        forgotForm.reset();
+        verifyForm.reset();
+
+        forgotError.style.display = 'none';
+        forgotSuccess.style.display = 'none';
+        verifyError.style.display = 'none';
+        verifySuccess.style.display = 'none';
+
+        // Hiện lại form nhập email/mật khẩu
+        forgotForm.classList.remove('d-none');
+        verifyForm.classList.add('d-none');
+      }
+
+    </script>
+
+
+    <p class="policy-text">
+      Bằng việc tiếp tục, bạn đã đồng ý với 
+      <a href="#">Điều khoản</a> và <a href="#">Chính sách</a>
+    </p>
+  </div>
+</div>
+
+

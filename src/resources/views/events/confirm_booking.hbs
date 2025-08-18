@@ -1,0 +1,151 @@
+<!-- HEADER SỰ KIỆN -->
+<div class="text-white px-4 d-flex align-items-start" style="background: linear-gradient(to right, #b83a29, #1f0e17); padding: 12px 1.5rem;">
+  <div class="container">
+    <h3 class="fw-bold text-uppercase mb-2" style="font-size: 1.4rem;">{{ event.name }}</h3>
+    <div style="color: white; font-size: 0.9rem;">
+      <i class="fas fa-map-marker-alt me-1"></i> {{ event.location }} <br>
+      <i class="fas fa-calendar-alt me-1"></i> {{ event.time }}
+    </div>
+  </div>
+</div>
+
+<!-- NỘI DUNG CHÍNH -->
+<div class="container mt-4 mb-5">
+  <div class="row">
+    <!-- Cột trái: Form -->
+    <div class="col-md-7 mb-4 mb-md-0">
+      <div class="bg-dark text-white p-4 rounded shadow-sm">
+        <h4 class="mb-4 text-success fw-bold">BẢNG CÂU HỎI</h4>
+
+        <form id="formXacNhan">
+          <div class="mb-3">
+            <label class="form-label fw-bold">* Họ và Tên</label>
+            <input type="text" class="form-control" name="hoVaTen" required placeholder="Điền câu trả lời của bạn">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">* Số điện thoại</label>
+            <input type="tel" class="form-control" name="soDienThoai" required placeholder="Điền câu trả lời của bạn">
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-bold">* Email</label>
+            <input type="email" class="form-control" name="email" value="{{email_login}}" readonly>
+          </div>
+
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="dongYHoaDon" required>
+            <label class="form-check-label" for="dongYHoaDon">
+              * BTC sẽ xuất hóa đơn theo thông tin khách hàng cung cấp trong "Bảng câu hỏi"
+            </label>
+          </div>
+
+          <div class="form-check mb-4">
+            <input class="form-check-input" type="checkbox" id="dongYSuDung" required>
+            <label class="form-check-label" for="dongYSuDung">
+              * Tôi đồng ý Ticketbox & BTC sử dụng thông tin đặt vé nhằm mục đích vận hành sự kiện
+            </label>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Cột phải: Vé -->
+    <div class="col-md-5">
+      <div class="bg-dark text-white p-4 rounded shadow-sm">
+        <h5 class="fw-bold text-success mb-4">THÔNG TIN ĐẶT VÉ</h5>
+
+        <table class="table table-borderless table-dark table-striped mb-4">
+          <thead>
+            <tr>
+              <th style="width: 45%;">Loại vé</th>
+              <th class="text-center" style="width: 25%;">Số lượng</th>
+              <th class="text-center" style="width: 30%;">Tổng</th>
+            </tr>
+          </thead>
+          <tbody id="bangVe" class="align-middle"></tbody>
+        </table>
+
+        <div class="d-flex justify-content-between fw-bold pt-3 mt-3" style="border-top: 1px dashed #555;">
+          <span>Tạm tính (<span id="tongSoLuong">0</span> vé):</span>
+          <span class="text-success" id="tongTien">0 đ</span>
+        </div>
+
+        <button class="btn btn-success text-white w-100 fw-bold mt-4 py-2" style="background-color: #2ea848;" id="nutTiepTuc">
+          Tiếp tục <i class="fas fa-arrow-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT -->
+<script>
+  const danhSachVeDaChon = JSON.parse(localStorage.getItem('selectedTickets') || '[]');
+  const bangVe = document.getElementById('bangVe');
+  const spanSoLuong = document.getElementById('tongSoLuong');
+  const spanTongTien = document.getElementById('tongTien');
+
+  let tongSoLuong = 0;
+  let tongTien = 0;
+
+  danhSachVeDaChon.forEach(ve => {
+    const giaSo = parseInt(ve.price.replace(/\./g, ''));
+    const thanhTien = giaSo * ve.quantity;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td style="font-size: 0.92rem;">${ve.type}</td>
+      <td class="text-center">${ve.quantity}</td>
+      <td class="text-center">${thanhTien.toLocaleString()} đ</td>
+    `;
+    bangVe.appendChild(row);
+
+    tongSoLuong += ve.quantity;
+    tongTien += thanhTien;
+  });
+
+  spanSoLuong.textContent = tongSoLuong;
+  spanTongTien.textContent = tongTien.toLocaleString('vi-VN') + ' đ';
+
+  document.getElementById('nutTiepTuc').addEventListener('click', async (e) => {
+  e.preventDefault();
+  const form = document.getElementById('formXacNhan');
+  if (!form.checkValidity()) {
+    form.reportValidity();
+    return;
+  }
+
+  // Lấy dữ liệu form
+  const hoVaTen = form.hoVaTen.value;
+  const soDienThoai = form.soDienThoai.value;
+  const email = form.email.value;
+
+  // Lấy danh sách vé từ localStorage
+  const tickets = danhSachVeDaChon.map(ve => ({
+    type: ve.type,
+    price: parseInt(ve.price.replace(/\./g, '')),
+    quantity: ve.quantity,
+    total: parseInt(ve.price.replace(/\./g, '')) * ve.quantity
+  }));
+
+  const totalAmount = tickets.reduce((sum, t) => sum + t.total, 0);
+
+  try {
+    const response = await fetch(window.location.pathname, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ hoVaTen, soDienThoai, email, tickets, totalAmount })
+    });
+    const data = await response.json();
+    if (data.success) {
+      localStorage.removeItem('selectedTickets');
+      window.location.href = data.redirectUrl;
+    } else {
+      alert('Lưu thông tin đặt vé thất bại!');
+    }
+  } catch (error) {
+    alert('Đã xảy ra lỗi khi lưu thông tin!');
+  }
+});
+</script>

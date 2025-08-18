@@ -1,0 +1,79 @@
+
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px;">
+  <h1>{{titlePage}}</h1>
+
+  <div class="d-flex align-items-center">
+    <label for="bookingFilter" class="form-label me-2 mb-0">Lọc trạng thái vé:</label>
+    <select id="bookingFilter" class="form-select" onchange="handleFilterChange(this)">
+      <option value="">-- Chọn trạng thái --</option>
+      <option value="/admin/booking_management">📋 Quản lý tất cả vé</option>
+      <option value="/admin/booking_management/success">✔️ Vé đặt thành công</option>
+      <option value="/admin/booking_management/pending">⏳ Vé đang chờ hủy</option>
+      <option value="/admin/booking_management/canceled">❌ Vé đã hủy</option>
+    </select>
+  </div>
+</div>
+
+<table class="table table-bordered table-hover mt-3">
+  <thead class="table-dark">
+    <tr>
+      <th style="width: 50px;">#</th>
+      <th style="width: 200px;">Họ tên</th>
+      <th>Email</th>
+      <th>SĐT</th>
+      <th style="width: 250px;">Sự kiện</th>
+      <th style="width: 300px;">Chi tiết vé</th>
+      <th style="width: 200px;">Tổng tiền</th>
+      <th style="width: 100px;">HELP</th> <!-- thêm cột trạng thái -->
+    </tr>
+  </thead>
+  <tbody>
+    {{#each allBooking}}
+    <tr>
+      <td>#{{bookingCode}}</td>       
+      <td>{{this.fullName}}</td>
+      <td>{{this.email}}</td>
+      <td>{{this.phone}}</td>
+      <td>{{this.eventName}}</td>
+      <td>
+        <ul>
+          {{#each this.tickets}}
+            <li>
+              {{this.type}} <br>
+              Số lượng: {{this.quantity}} <br>
+              Giá: {{formatNumber this.price}} <br>
+              Tạm tính: {{formatNumber this.total}}
+              <hr>
+            </li>
+          {{/each}}
+        </ul>
+      </td>
+      <td><strong>{{formatNumber this.totalAmount}} VND</strong></td>
+
+      <!-- Cột trạng thái -->
+      <td>
+        {{#if this.isCanceled}}
+          <span class="text-danger">Đã hủy</span>
+        {{else if this.cancelRequest}}
+          <form action="/admin/booking_management/confirm-cancel/{{this._id}}" method="POST">
+            <button class="btn btn-sm btn-warning">Duyệt hủy</button>
+          </form>
+        {{else}}
+          <span class="text-success">Đã đặt</span>
+        {{/if}}
+      </td>
+    </tr>
+    {{/each}}
+  </tbody>
+</table>
+
+
+<script>
+  function handleFilterChange(select) {
+    const value = select.value;
+    if (value) {
+      window.location.href = value;
+    }
+  }
+</script>

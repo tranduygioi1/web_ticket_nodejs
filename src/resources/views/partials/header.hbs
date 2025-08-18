@@ -1,0 +1,117 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-success">
+  <div class="container">
+
+    <!-- Logo -->
+    <a class="navbar-brand" href="/" style="font-family: fantasy; font-size: 28px;">ticketbox</a>
+
+    <!-- Toggle khi thu nhỏ -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Nội dung -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <form class="search-form mx-auto" method="GET" action="/events/search">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input type="search" name="q" value="{{keyword}}" placeholder="Bạn tìm gì hôm nay?" aria-label="Search">
+        <button type="submit">Tìm kiếm</button>
+      </div>
+    </form>
+
+      <!-- Menu bên phải -->
+      <div class="ms-auto d-flex align-items-center">
+
+      <div class="ms-auto d-flex align-items-center">
+        {{#if user}}
+          <!-- Nếu đã đăng nhập -->
+          <a class="text-white fw-bold text-decoration-none" 
+            style="margin-left:20px;" 
+            href="/events/my_ticket">
+            <i class="fas fa-ticket-alt"></i> Vé của tôi
+          </a>
+
+      <div class="dropdown ml-3">
+        <button class="btn bg-success d-flex align-items-center dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <div class="rounded-circle bg-white text-dark d-flex justify-content-center align-items-center" style="width: 32px; height: 32px; font-size: 14px;">
+            {{uppercaseFirst user.email.[0]}}
+          </div>
+          <span class="ml-2 text-white">Tài khoản</span>
+        </button>
+        <div class="dropdown-menu dropdown-menu-right mt-2">
+          <a class="dropdown-item" href="/events/my_ticket"><i class="bi bi-ticket-perforated mr-2"></i>Vé của tôi</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="/user/logout"><i class="bi bi-box-arrow-right mr-2"></i>Đăng xuất</a>
+        </div>
+      </div>
+
+        {{else}}
+          <!-- Nếu chưa đăng nhập -->
+          <a href="#" class="text-white fw-bold text-decoration-none" 
+            style="margin-left:20px;" 
+            onclick="event.preventDefault(); showLoginModal()">
+            <i class="fas fa-ticket-alt"></i> Vé của tôi
+          </a>
+
+          <div class="d-flex align-items-center" style="margin-left:20px;">
+            <a href="#" class="text-white fw-bold text-decoration-none" 
+              onclick="event.preventDefault(); showLoginModal()">Đăng nhập</a>
+            <span class="text-white fw-bold px-2">|</span>
+            <a href="#" class="text-white fw-bold text-decoration-none" 
+              onclick="event.preventDefault(); switchToRegister()">Đăng ký</a>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- STYLE INLINE -->
+<style>
+  .search-form {
+    display: flex;
+    align-items: center;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-radius: 6px;
+    overflow: hidden;
+    width: 380px;              /* rộng hơn */
+    height: 42px;              /* cao hơn */
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  }
+
+  .search-box i {
+    color: #888;
+    margin: 0 12px;
+    font-size: 16px;
+  }
+
+  .search-box input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 8px 10px;
+    font-size: 15px;           /* chữ to hơn */
+  }
+
+  .search-box button {
+    background: none;
+    border: none;
+    padding: 8px 14px;
+    font-weight: 600;
+    color: #333;
+    cursor: pointer;
+    border-left: 1px solid #ddd;
+    font-size: 15px;
+  }
+
+  .search-box button:hover {
+    color: #28a745;
+  }
+</style>

@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="mt-4">
+    <h3>Tạo Sự Kiện</h3>
+
+    {{!-- Hiển thị thông báo flash --}}
+    {{#if messages}}
+      {{#each messages}}
+        <div class="alert alert-{{this.type}} alert-dismissible fade show mt-2" role="alert">
+          {{this.message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {{/each}}
+    {{/if}}
+
+    <form method="POST" action="/admin/addevent">
+      <div class="danh-muc-su-kien mb-3">
+        <label for="category">Chọn danh mục sự kiện</label>
+        <select class="form-select" name="category" aria-label="Chọn danh mục sự kiện">
+          <option disabled {{#unless event.category}}selected{{/unless}}>-- Chọn danh mục sự kiện --</option>
+          <option value="special" {{#if (eq event.category "special")}}selected{{/if}}>Sự kiện đặc biệt</option>
+          <option value="trending" {{#if (eq event.category "trending")}}selected{{/if}}>Sự kiện xu hướng</option>
+          <option value="foryou" {{#if (eq event.category "foryou")}}selected{{/if}}>Dành cho bạn</option>
+          <option value="livemusic" {{#if (eq event.category "livemusic")}}selected{{/if}}>Nhạc sống</option>
+          <option value="stageart" {{#if (eq event.category "stageart")}}selected{{/if}}>Sân khấu và nghệ thuật</option>
+          <option value="category" {{#if (eq event.category "category")}}selected{{/if}}>Thể loại khác</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="name">Tên sự kiện</label>
+        <input type="text" class="form-control" id="name" name="name" value="{{event.name}}">
+      </div>
+
+      <div class="form-group">
+        <label for="description">Mô tả</label>
+        <textarea name="description" id="description" rows="10" cols="80">{{event.description}}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="image">Hình ảnh</label>
+        <input type="text" class="form-control" id="image" name="image" value="{{event.image}}">
+      </div>
+
+      <div class="form-group">
+        <label for="location">Địa điểm</label>
+        <input type="text" class="form-control" id="location" name="location" value="{{event.location}}">
+      </div>
+
+      <div class="form-group">
+        <label for="eventDate">Ngày sự kiện</label>
+        <input type="date" class="form-control" id="eventDate" name="eventDate" value="{{event.eventDate}}">
+      </div>
+
+      <div class="form-group">
+        <label for="startTime">Giờ bắt đầu</label>
+        <input type="text" class="form-control" id="startTime" name="startTime" value="{{event.startTime}}" placeholder="Chọn hoặc nhập giờ bắt đầu">
+      </div>
+
+      <div class="form-group">
+        <label for="endTime">Giờ kết thúc</label>
+        <input type="text" class="form-control" id="endTime" name="endTime" value="{{event.endTime}}" placeholder="Chọn hoặc nhập giờ kết thúc">
+      </div>
+
+      <!-- Giá vé -->
+      <div class="form-group">
+        <label>Giá vé</label>
+        <div id="vungGiaVe">
+          {{#if event.prices}}
+            {{#each event.prices}}
+              <div class="d-flex mb-2">
+                <input type="text" name="prices[{{@index}}][type]" class="form-control mr-2" value="{{this.type}}" placeholder="Loại vé">
+                <input type="text" name="prices[{{@index}}][price]" class="form-control" value="{{formatNumber this.price}}" placeholder="Giá">
+              </div>
+            {{/each}}
+          {{else}}
+            <div class="d-flex mb-2">
+              <input type="text" name="prices[0][type]" class="form-control mr-2" placeholder="Loại vé">
+              <input type="text" name="prices[0][price]" class="form-control" placeholder="Giá">
+            </div>
+          {{/if}}
+        </div>
+        <button type="button" class="btn btn-sm btn-secondary mt-2" onclick="themGiaVe()">+ Thêm giá vé</button>
+      </div>
+
+      <button type="submit" class="btn btn-primary mb-4">Thêm Sự Kiện</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let chiSoGiaVe = {{#if event.prices}}{{event.prices.length}}{{else}}1{{/if}};
+
+  function themGiaVe() {
+    const vungChua = document.getElementById('vungGiaVe');
+    const oMoi = document.createElement('div');
+    oMoi.className = "d-flex mb-2";
+    oMoi.innerHTML = `
+      <input type="text" name="prices[${chiSoGiaVe}][type]" class="form-control mr-2" placeholder="Loại vé">
+      <input type="text" name="prices[${chiSoGiaVe}][price]" class="form-control" placeholder="Giá">
+    `;
+    vungChua.appendChild(oMoi);
+    chiSoGiaVe++;
+  }
+</script>

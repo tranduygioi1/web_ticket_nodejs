@@ -1,0 +1,128 @@
+<div class="chon-ve-body">
+  <!-- Header nhỏ -->
+  <div class="chon-ve-header mt-3">
+    <a href="javascript:history.back()"><i class="fas fa-arrow-left me-2"></i> Trở về</a>
+    <h5>Chọn vé</h5>
+  </div>
+
+  <!-- Nội dung 2 cột -->
+  <div class="chon-ve-content">
+    <!-- Cột trái: Danh sách vé -->
+    <div class="danh-sach-ve">
+      <table>
+        <thead>
+          <tr>
+            <th>Loại vé</th>
+            <th style="text-align:right;">Số lượng</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each event.prices}}
+          <tr>
+            <td>
+              <strong>{{this.type}}</strong><br>
+              <span>{{this.price}} đ</span>
+            </td>
+            <td>
+              <div class="quantity-control">
+                <button onclick="capNhatSoLuong(this, -1)">-</button>
+                <input type="text" class="o-luong-ve" value="0" readonly>
+                <button onclick="capNhatSoLuong(this, 1)">+</button>
+              </div>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Cột phải: Thông tin vé -->
+    <div class="thong-tin-ve">
+      <div class="thong-tin-top">
+        <h5>{{event.name}}</h5>
+        <p><i class="far fa-clock"></i> {{event.time}}</p>
+        <p><i class="fas fa-map-marker-alt"></i> {{event.location}}</p>
+        <hr>
+        <div>
+          <h6>Giá vé</h6>
+          <ul>
+            {{#each event.prices}}
+            <li>
+              <span>{{this.type}}</span>
+              <span class="text-success">{{this.price}} đ</span>
+            </li>
+            {{/each}}
+          </ul>
+        </div>
+      </div>
+
+      <div class="thong-tin-bottom">
+        <div class="total-tickets">
+          <i class="fas fa-ticket-alt"></i>
+          <span>Tổng: <strong id="tongSoLuong">0</strong> vé</span>
+        </div>
+        <button id="nutTiepTuc">
+          Vui lòng chọn vé <i class="fas fa-angle-double-right ms-2"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- JS -->
+<script>
+  const danhSachGiaVe = {{{json event.prices}}};
+
+  function capNhatSoLuong(nut, thayDoi) {
+    const oNhap = nut.parentElement.querySelector('.o-luong-ve');
+    let soLuong = parseInt(oNhap.value);
+    soLuong = Math.max(0, soLuong + thayDoi);
+    oNhap.value = soLuong;
+    tinhTongTien();
+  }
+
+  function tinhTongTien() {
+    let tongSoLuong = 0;
+    let tongTien = 0;
+    const cacONhap = document.querySelectorAll('.o-luong-ve');
+    const danhSachDaChon = [];
+
+    cacONhap.forEach((oNhap, i) => {
+      const soLuong = parseInt(oNhap.value);
+      const giaVeStr = danhSachGiaVe[i].price;
+      const giaVe = parseInt(giaVeStr.replace(/\./g, ''));
+
+      if (soLuong > 0) {
+        danhSachDaChon.push({
+          type: danhSachGiaVe[i].type,
+          price: giaVeStr,
+          quantity: soLuong
+        });
+      }
+
+      tongSoLuong += soLuong;
+      tongTien += soLuong * giaVe;
+    });
+
+    document.getElementById('tongSoLuong').innerText = tongSoLuong;
+    const nutTiepTuc = document.getElementById('nutTiepTuc');
+
+    if (tongSoLuong > 0) {
+      nutTiepTuc.classList.add('active');
+      nutTiepTuc.innerHTML = `Tiếp tục - <span>${tongTien.toLocaleString()}</span> đ <i class="fas fa-angle-double-right ms-2"></i>`;
+
+      nutTiepTuc.onclick = () => {
+        // 🔁 Lưu vào localStorage
+        localStorage.setItem('selectedTickets', JSON.stringify(danhSachDaChon));
+        // 🔁 Chuyển trang
+        window.location.href = window.location.pathname + '/confirm_booking';
+      };
+    } else {
+      nutTiepTuc.classList.remove('active');
+      nutTiepTuc.innerHTML = `Vui lòng chọn vé <i class="fas fa-angle-double-right ms-2"></i>`;
+      nutTiepTuc.onclick = null;
+    }
+  }
+</script>
+

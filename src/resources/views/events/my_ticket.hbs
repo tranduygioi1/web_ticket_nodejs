@@ -1,0 +1,160 @@
+<link rel="stylesheet" href="/css/my_ticket.css">
+
+<div class="container py-5">
+  <!-- Tiêu đề -->
+  <h3 class="text-white fw-bold fs-3 text-center mb-4">Vé Của Tôi</h3>
+
+  <!-- Tabs -->
+  <div class="ticket-tabs d-flex justify-content-center gap-3 mb-4">
+    <button class="btn btn-success" onclick="hienThiTab('tatca', this)">Tất cả</button>
+    <button class="btn btn-secondary" onclick="hienThiTab('dadat', this)">Đã đặt</button>
+    <button class="btn btn-secondary" onclick="hienThiTab('choduyet', this)">Đang chờ duyệt</button>
+    <button class="btn btn-secondary" onclick="hienThiTab('dahuy', this)">Đã hủy</button>
+  </div>
+
+  <!-- Nội dung các tab -->
+  <div class="tab-content">
+    <!-- Tất cả -->
+    <div id="tab-tatca" class="ve-tab">
+      {{#if allticket.length}}
+        {{#each allticket}}
+          <div class="ticket-card mb-3 p-3 bg-light rounded">
+            <p><strong>Mã đơn hàng:</strong> #{{bookingCode}}</p>
+            <p><strong>Họ và Tên:</strong> {{fullName}}</p>
+            <p><strong>Sự kiện:</strong> {{eventName}}</p>
+            <ul>
+              {{#each tickets}}
+                <li>{{type}} - {{quantity}} vé - {{formatNumber total}} VND</li>
+              {{/each}}
+            </ul>
+            <p><strong>Thời gian:</strong> {{time}}</p>
+            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
+            <p><strong>Trạng thái:</strong>
+              {{#if isCanceled}}
+                <span class="text-danger">Đã hủy</span>
+              {{else if cancelRequest}}
+                <span class="text-warning">Đang chờ duyệt</span>
+              {{else}}
+                <span class="text-success">Đã đặt</span>
+              {{/if}}
+            </p>
+            {{#unless isCanceled}}
+              {{#unless cancelRequest}}
+                <form action="/events/my_ticket/request-cancel/{{_id}}" method="POST">
+                  <button class="btn btn-sm btn-danger">Yêu cầu hủy vé</button>
+                </form>
+              {{/unless}}
+            {{/unless}}
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="text-muted">Bạn chưa có vé nào.</p>
+      {{/if}}
+    </div>
+
+    <!-- Đã đặt -->
+    <div id="tab-dadat" class="ve-tab d-none">
+      {{#if booked.length}}
+        {{#each booked}}
+          <div class="ticket-card mb-3 p-3 bg-light rounded">
+            <p><strong>Mã đơn hàng:</strong> #{{bookingCode}}</p>
+            <p><strong>Họ và Tên:</strong> {{fullName}}</p>
+            <p><strong>Sự kiện:</strong> {{eventName}}</p>
+            <ul>
+              {{#each tickets}}
+                <li>{{type}} - {{quantity}} vé - {{formatNumber total}} VND</li>
+              {{/each}}
+            </ul>
+            <p><strong>Thời gian:</strong> {{time}}</p>
+            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
+            <p><strong>Trạng thái:</strong> <span class="text-success">Đã đặt</span></p>
+            <form action="/events/my_ticket/request-cancel/{{_id}}" method="POST">
+              <button class="btn btn-sm btn-danger">Yêu cầu hủy vé</button>
+            </form>
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="text-muted">Bạn chưa có vé nào thành công.</p>
+      {{/if}}
+    </div>
+
+    <!-- Đang chờ duyệt -->
+    <div id="tab-choduyet" class="ve-tab d-none">
+      {{#if pending.length}}
+        {{#each pending}}
+          <div class="ticket-card mb-3 p-3 bg-light rounded">
+            <p><strong>Mã đơn hàng:</strong> #{{bookingCode}}</p>
+            <p><strong>Họ và Tên:</strong> {{fullName}}</p>
+            <p><strong>Sự kiện:</strong> {{eventName}}</p>
+            <ul>
+              {{#each tickets}}
+                <li>{{type}} - {{quantity}} vé - {{formatNumber total}} VND</li>
+              {{/each}}
+            </ul>
+            <p><strong>Thời gian:</strong> {{time}}</p>
+            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
+            <p><strong>Trạng thái:</strong> <span class="text-warning">Đang chờ duyệt</span></p>
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="text-muted">Bạn chưa có vé nào chờ duyệt.</p>
+      {{/if}}
+    </div>
+
+    <!-- Đã hủy -->
+    <div id="tab-dahuy" class="ve-tab d-none">
+      {{#if canceled.length}}
+        {{#each canceled}}
+          <div class="ticket-card mb-3 p-3 bg-light rounded">
+            <p><strong>Mã đơn hàng:</strong> #{{bookingCode}}</p>
+            <p><strong>Họ và Tên:</strong> {{fullName}}</p>
+            <p><strong>Sự kiện:</strong> {{eventName}}</p>
+            <ul>
+              {{#each tickets}}
+                <li>{{type}} - {{quantity}} vé - {{formatNumber total}} VND</li>
+              {{/each}}
+            </ul>
+            <p><strong>Thời gian:</strong> {{time}}</p>
+            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
+            <p><strong>Trạng thái:</strong> <span class="text-danger">Đã hủy</span></p>
+          </div>
+        {{/each}}
+      {{else}}
+        <p class="text-muted">Bạn chưa có vé nào đã hủy.</p>
+      {{/if}}
+    </div>
+  </div>
+</div>
+
+<!-- Có thể bạn yêu thích -->
+<div class="container my-5">
+  <h4 class="text-white fw-bold mb-4">Có thể bạn yêu thích</h4>
+  <div class="row">
+    {{#each allEvent}}
+      <div class="col-sm-6 col-lg-3 mb-4">
+        {{> eventCard this }}
+      </div>
+    {{/each}}
+  </div>
+</div>
+
+<!-- JavaScript xử lý chuyển tab -->
+<script>
+  function hienThiTab(tenTab, nutBam) {
+    const cacTab = document.querySelectorAll('.ve-tab');
+    cacTab.forEach(tab => tab.classList.add('d-none'));
+    document.getElementById('tab-' + tenTab).classList.remove('d-none');
+
+    const cacNut = nutBam.parentElement.querySelectorAll('button');
+    cacNut.forEach(nut => {
+      nut.classList.remove('btn-success');
+      nut.classList.add('btn-secondary');
+    });
+    nutBam.classList.remove('btn-secondary');
+    nutBam.classList.add('btn-success');
+  }
+</script>
