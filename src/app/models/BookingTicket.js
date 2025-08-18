@@ -2,11 +2,11 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const TicketSchema = new Schema({
-    type: String,    // đây là tên vé, không trùng với type của mongoose vì nằm trong sub-schema
+    type: String,   
     price: Number,
     quantity: Number,
     total: Number
-}, { _id: false }); // bạn có thể thêm _id:false nếu ko cần id cho từng vé
+}, { _id: false }); 
 
 const BookingTicketSchema = new Schema({
     bookingCode: { type: String, unique: true, required: true },
@@ -15,7 +15,7 @@ const BookingTicketSchema = new Schema({
     email: String,
     eventName: String,
     time: { type: String },
-    tickets: [TicketSchema],  // embed schema vé
+    tickets: [TicketSchema],  
     totalAmount: Number,
     createdAt: { type: Date, default: Date.now },
 

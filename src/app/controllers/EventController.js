@@ -53,19 +53,6 @@ class EventController {
             .catch(next);
     }
 
-    // myticket(req, res, next){
-    //     Event.aggregate([{ $sample: { size: 8 } }])
-    //     .then(events => {
-    //             res.render('events/my_ticket', {
-    //                 layout: 'main',         // dùng layout chính
-    //                 isHome: true,           // để giữ style giống trang chủ
-    //                 allEvent: multipleMongooseToObject(events)
-    //             });
-    //         })
-    //         .catch(next);
-    // }
-    
-
     myticket(req, res, next) {
         const emailLogin = req.session.user?.email_login?.trim();
 

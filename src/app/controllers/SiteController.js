@@ -33,32 +33,5 @@ module.exports = new SiteController();
 
 
 
-// const Event = require('../models/Event');
-// const { multipleMongooseToObject } = require('../../util/mongoose');
-
-// class SiteController {
-//     //[GET] /
-//     index(req, res, next) {
-//         Promise.all([
-//             Event.find({}).limit(3),   // Banner – chỉ 3 bản ghi
-//             Event.find({})            // Tất cả dữ liệu – dùng cho phần khác
-//         ])
-//         .then(([bannerEvents, allEvent]) => {
-//             res.render('home', {
-//                 bannerEvents: multipleMongooseToObject(bannerEvents),
-//                 allEvent: multipleMongooseToObject(allEvent)
-//             });
-//         })
-//         .catch(next);
-//     }
-
-//     //[GET] /search
-//     search(req, res) {
-//         res.render('search');
-//     }
-// }
-
-// module.exports = new SiteController();
-
 
 

@@ -158,19 +158,19 @@ class AdminController {
     }
 
    // [GET] /admin/manage_roles
-manage_roles(req, res, next) {
-    Role.find({})
-        .then(roles => {
-            res.render('admin/manage_roles', { 
-                layout: 'admin',
-                roles: multipleMongooseToObject(roles), 
+    manage_roles(req, res, next) {
+        Role.find({})
+            .then(roles => {
+                res.render('admin/manage_roles', { 
+                    layout: 'admin',
+                    roles: multipleMongooseToObject(roles), 
+                });
+            })
+            .catch(err => {
+                console.error(err);
+                res.status(500).send('Lỗi load quyền');
             });
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Lỗi load quyền');
-        });
-}
+    }
 
 
     // [POST] /admin/addRole
@@ -205,12 +205,15 @@ manage_roles(req, res, next) {
         .catch(next);
     }
 
+    editRole(req, res) {
+    const roleId = req.params.id;
+    const { role_name, description } = req.body;
 
-
-        // [GET] /admin/assign_roles
-    assign_roles(req, res, next) {
-        res.render('admin/assign_roles', { 
-            layout: 'admin' 
+    Role.updateOne({ _id: roleId }, { role_name, description })
+        .then(() => res.redirect('/admin/manage_roles'))
+        .catch(err => {
+        console.error(err);
+        res.status(500).send("Lỗi khi cập nhật quyền");
         });
     }
 
