@@ -16,7 +16,8 @@ router.post('/add_role', adminController.addRole)
 router.post('/delete_role/:id', adminController.deleteRole);
 router.post('/edit_role/:id', adminController.editRole);
 
-// router.get('/assign_roles', adminController.assign_roles)
+router.get('/assign_roles/:id', adminController.assign_roles)
+router.post('/assign_roles/:id', adminController.save_assign_roles)
 
 
 router.post('/addevent', adminController.addevent)
