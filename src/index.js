@@ -69,7 +69,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// ✅ Middleware để xử lý modal đăng nhập
+// Middleware để xử lý modal đăng nhập
 app.use((req, res, next) => {
   res.locals.openLoginModal = req.query.openLoginModal === 'true';
   res.locals.error = req.query.error;
@@ -78,13 +78,13 @@ app.use((req, res, next) => {
 
 // Cấu hình template engine
 app.engine('hbs', engine({
-    extname: '.hbs',
-    layoutsDir: path.join(__dirname, 'resources', 'views', 'layouts'),
-    defaultLayout: 'main',
-    partialsDir: path.join(__dirname, 'resources', 'views', 'partials'),
-    helpers
-
+  extname: '.hbs',
+  layoutsDir: path.join(__dirname, 'resources', 'views', 'layouts'),
+  defaultLayout: 'main',
+  partialsDir: path.join(__dirname, 'resources', 'views', 'partials'),
+  helpers: helpers, // ✅ Thêm dòng này
 }));
+
 
 
 app.set('view engine', 'hbs');
