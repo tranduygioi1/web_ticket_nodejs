@@ -27,6 +27,7 @@ const LANDING_ORDER = [
   'Manage ticket',
   'Manage list event',
   'Create event',
+  'test'
 ];
 
 // ====== HELPER QUYỀN ======
