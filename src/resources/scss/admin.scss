@@ -3,72 +3,82 @@
     display: flex;
 }
 
-.sidebar-left {
-    width: 250px;
-    min-height: 100vh;
-    background-color: #0d0d1a;
-    padding: 20px;
-    color: white;
-}
-
-    .sidebar-left h5 {
-      color: #ccc;
-      margin-bottom: 1rem;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .sidebar-left h5:hover {
-      color: #00ffff;
-    }
-
-    .sidebar-left a {
-      display: block;
-      padding: 8px 12px;
-      color: white;
-      text-decoration: none;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-    }
-
-    .sidebar-left a:hover {
-      background-color: #1e1e2f;
-      color: #00ffff;
-      padding-left: 16px;
-    }
 
     .content-right {
       flex-grow: 1;
       width: 100px;
       padding: 20px;
     }
+/* ===== SIDEBAR NEW STYLE ===== */
+.sidebar-left {
+  width: 260px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #101020, #080812);
+  padding: 25px 20px;
+  color: #fff;
+  border-right: 1px solid rgba(255,255,255,0.05);
+  box-shadow: 3px 0 12px rgba(0,0,0,0.35);
+}
 
-    /* Submenu styling */
-    .submenu {
-      display: none;
-      margin-bottom: 1rem;
-      padding-left: 10px;
-    }
+/* Tiêu đề nhóm menu */
+.sidebar-left h5 {
+  color: #bfbfbf;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: 0.25s ease;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
 
-    .submenu a {
-      font-size: 0.95rem;
-      padding-left: 24px;
-      color: #ddd;
-    }
+.sidebar-left h5:hover {
+  color: #00eaff;
+  transform: translateX(4px);
+}
 
-    .submenu a:hover {
-      color: #00ffff;
-      background-color: #1e1e2f;
-      padding-left: 28px;
-    }
+/* Link chung */
+.sidebar-left a {
+  display: block;
+  padding: 10px 14px;
+  color: #d9d9d9;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: 0.30s ease;
+  font-size: 0.95rem;
+}
 
-    label[for="bookingFilter"] {
-      white-space: nowrap;
-    }
+.sidebar-left a:hover {
+  background-color: rgba(0, 238, 255, 0.07);
+  color: #00eaff;
+  padding-left: 22px;
+}
 
-    .sidebar-left .menu-group h5 a.main-link {
-      color: #fff;
-      text-decoration: none;
-      display: block;
-      padding: 5px 0;
-    }
+/* Main link (dành cho mục không có submenu) */
+.sidebar-left .main-link {
+  font-weight: 500;
+  color: #fff !important;
+  padding-left: 0 !important;
+}
+
+/* Submenu */
+.submenu {
+  display: none;
+  margin-bottom: 18px;
+  padding-left: 6px;
+}
+
+.submenu a {
+  font-size: 0.9rem;
+  padding-left: 26px;
+  color: #c7c7c7;
+}
+
+.submenu a:hover {
+  background-color: rgba(0, 238, 255, 0.08);
+  color: #00eaff;
+  padding-left: 30px;
+}
+
+/* Hiển thị submenu khi toggle */
+.submenu.show {
+  display: block !important;
+}

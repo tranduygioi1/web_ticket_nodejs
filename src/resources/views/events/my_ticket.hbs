@@ -28,7 +28,7 @@
               {{/each}}
             </ul>
             <p><strong>Thời gian:</strong> {{time}}</p>
-            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Ngày đặt:</strong> {{formatDate createdAt}}</p>
             <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
             <p><strong>Trạng thái:</strong>
               {{#if isCanceled}}
@@ -67,7 +67,7 @@
               {{/each}}
             </ul>
             <p><strong>Thời gian:</strong> {{time}}</p>
-            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Ngày đặt:</strong> {{formatDate createdAt}}</p>
             <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
             <p><strong>Trạng thái:</strong> <span class="text-success">Đã đặt</span></p>
             <form action="/events/my_ticket/request-cancel/{{_id}}" method="POST">
@@ -118,7 +118,7 @@
               {{/each}}
             </ul>
             <p><strong>Thời gian:</strong> {{time}}</p>
-            <p><strong>Ngày đặt:</strong> {{createdAt}}</p>
+            <p><strong>Ngày đặt:</strong> {{formatDate createdAt}}</p>
             <p><strong>Tổng tiền:</strong> {{formatNumber totalAmount}} VND</p>
             <p><strong>Trạng thái:</strong> <span class="text-danger">Đã hủy</span></p>
           </div>
