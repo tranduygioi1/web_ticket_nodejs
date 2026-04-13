@@ -82,7 +82,7 @@ app.engine('hbs', engine({
   layoutsDir: path.join(__dirname, 'resources', 'views', 'layouts'),
   defaultLayout: 'main',
   partialsDir: path.join(__dirname, 'resources', 'views', 'partials'),
-  helpers: helpers, // ✅ Thêm dòng này
+  helpers: helpers, 
 }));
 
 

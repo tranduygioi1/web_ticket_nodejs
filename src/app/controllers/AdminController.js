@@ -10,7 +10,7 @@ const defaultAdmins = require('../../config/db/adminAccounts');
 const Admin = require('../models/Admin');
 const Role = require('../models/Role');
 
-// ====== CẤU HÌNH QUYỀN → ĐƯỜNG DẪN ======
+//  CẤU HÌNH QUYỀN && ĐƯỜNG DẪN 
 const PATH_BY_PERMISSION = {
   'Create event':        '/admin/create_event',
   'Manage list event':   '/admin/list_event',
@@ -124,7 +124,7 @@ class AdminController {
       });
   }
 
-  // ============ QUẢN LÝ ADMIN ============
+  // QUẢN LÝ ADMIN 
 
   // GET /admin/manage_admin (xem danh sách)
   manageAdmin(req, res) {
