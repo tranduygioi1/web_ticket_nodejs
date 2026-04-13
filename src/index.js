@@ -13,7 +13,7 @@ const db = require('./config/db');
 const helpers = require('../helpers/helper');
 
 app.use(session({
-  secret: 'ban-co-the-thay-bang-key-cua-ban',
+  secret: 'ticket_box',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -34,14 +34,6 @@ app.use((req, res, next) => {
   res.locals.user = req.session.user || null; 
   next();
 });
-
-
-// app.use(session({
-//   secret: 'your_secret_key',     // khóa bí mật để mã hóa session cookie
-//   resave: false,                 // không lưu lại session nếu không có thay đổi
-//   saveUninitialized: false,      // không lưu session chưa được thiết lập
-//   cookie: { maxAge: 1000 * 60 * 60 * 24 }  // thời gian tồn tại cookie (vd: 1 ngày)
-// }));
 
 
 // Kết nối database
